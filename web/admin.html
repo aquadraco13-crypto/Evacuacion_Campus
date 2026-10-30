@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Net Path UPC · Administración</title>
+  <link rel="stylesheet" href="estilos.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body data-rol="admin" class="cargando sin-sesion">
+
+<header class="cabecera">
+  <div class="cabecera-izq">
+    <div class="logo">
+      <span class="logo-icon">◈</span>
+      <div>
+        <h1>Net Path UPC · Administración</h1>
+        <p>Solo personal autorizado · Campus Universidad Popular del Cesar</p>
+      </div>
+    </div>
+  </div>
+  <div class="cabecera-der">
+    <button id="btnAlerta" class="btn-alerta" type="button" aria-pressed="false">
+      <span class="punto-alerta"></span>
+      <span id="textoAlerta">Emergencia</span>
+    </button>
+    <button id="btnSalir" class="btn-salir" type="button">Cerrar sesión</button>
+  </div>
+</header>
+
+<section class="login-caja" aria-labelledby="tituloLogin">
+  <h2 id="tituloLogin">Entrar como administrador</h2>
+  <p>Solo los administradores pueden activar o desactivar la emergencia y bloquear caminos.</p>
+  <form id="formLogin" novalidate>
+    <label for="inClave">Clave de administrador</label>
+    <input id="inClave" name="clave" type="password" autocomplete="current-password" required>
+    <button id="btnEntrar" type="submit">Entrar</button>
+    <div id="msgLogin" class="login-msg" role="alert"></div>
+  </form>
+  <p><a href="/">← Volver a la vista de estudiantes</a></p>
+</section>
+
+<main class="contenido">
+
+  <section class="mapa-caja">
+    <div class="mapa-toolbar">
+      <span class="toolbar-titulo">Mapa del campus</span>
+      <div class="toolbar-acciones">
+        <button type="button" id="btnSimular" class="btn-tool" title="Simular personas evacuando">
+          ▶ Simular personas
+        </button>
+        <button type="button" id="btnDetener" class="btn-tool oculto" title="Detener simulación">
+          ■ Detener
+        </button>
+      </div>
+    </div>
+    <svg id="mapa" role="img" aria-label="Plano del campus con rutas de evacuación"></svg>
+  </section>
+
+  <aside class="panel">
+
+    <section class="panel-sec">
+      <h2>Estado actual</h2>
+      <p id="infoAdmin" class="info-admin" role="status">Consultando…</p>
+      <p class="pista">Lo que cambies aquí lo ven todos los estudiantes en pocos segundos.</p>
+    </section>
+
+    <section class="panel-sec">
+      <h2>1 · Punto de partida (ensayo)</h2>
+      <select id="selOrigen" aria-label="Ubicación de prueba"></select>
+      <p class="pista">Sirve para ver qué ruta le saldría a un estudiante en ese punto.</p>
+    </section>
+
+    <section class="panel-sec">
+      <h2>2 · Herramienta del mapa</h2>
+      <div class="seg" role="group" aria-label="Herramienta">
+        <button type="button" data-modo="ubicacion" class="activo">Mi ubicación</button>
+        <button type="button" data-modo="bloqueo">Bloquear camino</button>
+      </div>
+      <p class="pista" id="pistaModo"></p>
+      <div class="fila">
+        <button type="button" id="btnLimpiar" class="secundario">Quitar bloqueos</button>
+        <button type="button" id="btnAzar" class="secundario">Punto al azar</button>
+      </div>
+    </section>
+
+    <section id="resultado" class="panel-sec" aria-live="polite"></section>
+
+    <section id="alternativas" class="panel-sec"></section>
+
+    <section class="panel-sec">
+      <h2>Leyenda</h2>
+      <ul class="leyenda">
+        <li><i class="pt salon"></i> Salón o lugar</li>
+        <li><i class="pt pasillo"></i> Pasillo o cruce</li>
+        <li><i class="pt puerta"></i> Puerta de edificio</li>
+        <li><i class="pt pe"></i> Punto de encuentro</li>
+        <li><i class="ln ruta"></i> Ruta de evacuación</li>
+        <li><i class="ln riesgo"></i> Camino con riesgo</li>
+        <li><i class="ln bloqueo"></i> Camino bloqueado</li>
+        <li><i class="pt persona"></i> Persona (emergencia)</li>
+        <li><i class="pt persona-normal"></i> Persona (normal)</li>
+      </ul>
+    </section>
+
+  </aside>
+</main>
+
+<script src="app.js"></script>
+<script src="acceso.js"></script>
+</body>
+</html>
