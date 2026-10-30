@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Net Path UPC · Navegación de Emergencias</title>
+  <link rel="stylesheet" href="estilos.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body data-rol="estudiante">
+
+<header class="cabecera">
+  <div class="cabecera-izq">
+    <div class="logo">
+      <span class="logo-icon">◈</span>
+      <div>
+        <h1>Net Path UPC</h1>
+        <p>Sistema de navegación para emergencias · Campus Universidad Popular del Cesar</p>
+      </div>
+    </div>
+  </div>
+  <div class="cabecera-der">
+    <div id="estadoAlerta" class="btn-alerta estado-pill" role="status" aria-live="polite">
+      <span class="punto-alerta"></span>
+      <span id="textoEstado">Consultando…</span>
+    </div>
+  </div>
+</header>
+
+<p id="bannerAlerta" class="banner-alerta" role="alert" hidden>
+  EMERGENCIA ACTIVA · Sigue la ruta marcada en el mapa hacia el punto de encuentro.
+</p>
+
+<main class="contenido">
+
+  <section class="mapa-caja">
+    <div class="mapa-toolbar">
+      <span class="toolbar-titulo">Mapa del campus</span>
+    </div>
+    <svg id="mapa" role="img" aria-label="Plano del campus con rutas de evacuación"></svg>
+  </section>
+
+  <aside class="panel">
+
+    <section class="panel-sec">
+      <h2>1 · ¿Dónde estás?</h2>
+      <select id="selOrigen" aria-label="Tu ubicación actual"></select>
+      <p class="pista">También puedes tocar un punto directamente en el mapa.</p>
+    </section>
+
+    <section id="resultado" class="panel-sec" aria-live="polite"></section>
+
+    <section id="alternativas" class="panel-sec"></section>
+
+    <section class="panel-sec">
+      <h2>Leyenda</h2>
+      <ul class="leyenda">
+        <li><i class="pt salon"></i> Salón o lugar</li>
+        <li><i class="pt pasillo"></i> Pasillo o cruce</li>
+        <li><i class="pt puerta"></i> Puerta de edificio</li>
+        <li><i class="pt pe"></i> Punto de encuentro</li>
+        <li><i class="ln ruta"></i> Ruta de evacuación</li>
+        <li><i class="ln riesgo"></i> Camino con riesgo</li>
+        <li><i class="ln bloqueo"></i> Camino bloqueado</li>
+      </ul>
+    </section>
+
+  </aside>
+</main>
+
+<footer class="pie"><a href="/admin.html">Acceso administradores</a></footer>
+
+<script src="app.js"></script>
+</body>
+</html>
