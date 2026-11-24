@@ -4,17 +4,25 @@ const NS = 'http://www.w3.org/2000/svg';
 
 // Edificios: solo decoración del plano (el grafo vive en el servidor Java).
 const EDIFICIOS = [
-  { n: 'Comedor',                x: 30,   y: 40,  w: 120, h: 95 },
-  { n: 'Bloque H',               x: 350,  y: 40,  w: 120, h: 100 },
-  { n: 'Bloques C · D',          x: 130,  y: 165, w: 270, h: 115 },
-  { n: 'Bloques A · B',          x: 130,  y: 340, w: 270, h: 120 },
-  { n: 'Cafetería',              x: 30,   y: 250, w: 100, h: 70 },
-  { n: 'Bloque I',               x: 560,  y: 145, w: 100, h: 100 },
-  { n: 'Caf. I-P',               x: 640,  y: 100, w: 90,  h: 55 },
-  { n: 'Bloque P · Laboratorios',x: 720,  y: 145, w: 130, h: 170 },
-  { n: 'Académico-Adm.',         x: 1030, y: 210, w: 140, h: 120 },
-  { n: 'Biblio · Registro · Aud.', x: 520, y: 555, w: 250, h: 120 },
+  { n: 'Bloque I', x: 603, y: 411, w: 134, h: 157 },
+  { n: 'Bloques C · D', x: 301, y: 284, w: 142, h: 127 },
+  { n: 'Bloque E', x: 396, y: 383, w: 83, h: 149 },
+  { n: 'Bloques A · B', x: 311, y: 498, w: 99, h: 67 },
+  { n: 'Bloques F · G', x: 446, y: 316, w: 138, h: 77 },
+  { n: 'Bloque P', x: 578, y: 279, w: 99, h: 90 },
+  { n: 'Bloque H', x: 277, y: 94, w: 149, h: 186 },
+  { n: 'Comedor', x: 146, y: 181, w: 135, h: 136 },
+  { n: 'Caf. Bloque I', x: 615, y: 352, w: 75, h: 61 },
+  { n: 'Caf. Bloque A', x: 223, y: 412, w: 59, h: 66 },
+  { n: 'Académico-Adm.', x: 767, y: 528, w: 223, h: 225, circ: true },
+  { n: 'Biblio · Virtual teca · Registro', x: 594, y: 799, w: 191, h: 194 },
 ];
+
+// Límite del predio (del modelo 3D, en las mismas unidades que el grafo: dos por unidad de plano).
+const PREDIO = [
+  [10,121],[61,75],[111,36],[163,8],[178,8],[208,34],[240,62],[294,104],[345,144],[392,183],[431,219],[470,251],[514,286],[521,295],
+  [498,330],[466,380],[430,440],[391,502],[364,542],[353,544],[327,520],[298,484],[257,433],[213,379],[170,326],[127,271],[88,221],[49,176],[17,136],
+].map(([u, v]) => [u * 2, v * 2].join(',')).join(' ');
 
 const RADIO = { SALON: 7, PASILLO: 4.5, SALIDA: 5.5, PUNTO_ENCUENTRO: 13 };
 
@@ -208,32 +216,21 @@ function construirMapa() {
   const svg = $('mapa');
   svg.replaceChildren();
 
-  // Fondo: plaza y edificios
-  // Plaza central
-  el('rect', { x: 450, y: 340, width: 160, height: 90, rx: 16, class: 'plaza' }, svg);
-  el('text', { x: 530, y: 390, class: 'plaza-nombre', 'text-anchor': 'middle' }, svg).textContent = 'Plaza central';
+  // Fondo: predio, plaza y edificios (mismas posiciones que el modelo 3D)
+  el('polygon', { points: PREDIO, class: 'predio' }, svg);
+  el('rect', { x: 470, y: 440, width: 150, height: 130, rx: 24, class: 'plaza' }, svg);
+  el('text', { x: 545, y: 510, class: 'plaza-nombre', 'text-anchor': 'middle' }, svg).textContent = 'Plaza central';
 
   // Entradas (etiquetas grandes)
-  el('rect', { x: 1085, y: 360, width: 100, height: 36, rx: 8, fill: '#dbeafe', stroke: '#3b82f6', 'stroke-width': 2 }, svg);
-  el('text', { x: 1135, y: 383, class: 'plaza-nombre', 'text-anchor': 'middle', fill: '#1d4ed8', 'font-weight': '700' }, svg).textContent = 'ENTRADA';
-
-  el('rect', { x: 15, y: 455, width: 90, height: 36, rx: 8, fill: '#dbeafe', stroke: '#3b82f6', 'stroke-width': 2 }, svg);
-  el('text', { x: 60, y: 478, class: 'plaza-nombre', 'text-anchor': 'middle', fill: '#1d4ed8', 'font-weight': '700' }, svg).textContent = 'LATERAL';
-
-  // Arbolización
-  const arboles = [
-    [180, 130], [480, 120], [560, 90], [900, 120],
-    [100, 520], [400, 520], [500, 500], [850, 480],
-    [300, 650], [800, 650], [1000, 500], [150, 600],
-  ];
-  for (const [ax, ay] of arboles) {
-    el('circle', { cx: ax, cy: ay, r: 14, fill: '#c6e6c8', stroke: '#9ccc9e', 'stroke-width': 1.5, opacity: 0.85 }, svg);
-    el('circle', { cx: ax, cy: ay, r: 7, fill: '#a8d4aa', opacity: 0.9 }, svg);
+  for (const [x, y, t] of [[895, 770, 'ENTRADA PRINCIPAL'], [150, 405, 'ENTRADA LATERAL']]) {
+    el('rect', { x: x - 62, y: y - 17, width: 124, height: 34, rx: 8, class: 'entrada' }, svg);
+    el('text', { x, y: y + 4, class: 'entrada-nombre', 'text-anchor': 'middle' }, svg).textContent = t;
   }
 
   for (const e of EDIFICIOS) {
-    el('rect', { x: e.x, y: e.y, width: e.w, height: e.h, rx: 10, class: 'edificio' }, svg);
-    el('text', { x: e.x + 8, y: e.y + e.h - 8, class: 'edif-nombre' }, svg).textContent = e.n;
+    if (e.circ) el('ellipse', { cx: e.x + e.w / 2, cy: e.y + e.h / 2, rx: e.w / 2, ry: e.h / 2, class: 'edificio' }, svg);
+    else el('rect', { x: e.x, y: e.y, width: e.w, height: e.h, rx: 10, class: 'edificio' }, svg);
+    el('text', { x: e.x + e.w / 2, y: e.y + e.h - 8, class: 'edif-nombre', 'text-anchor': 'middle' }, svg).textContent = e.n;
   }
 
   // Caminos
