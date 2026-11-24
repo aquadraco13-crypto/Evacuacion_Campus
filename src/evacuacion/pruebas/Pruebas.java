@@ -204,8 +204,8 @@ public class Pruebas {
         RepositorioMapa mapaFalso = () -> new MapaCampus(mapaMinimo(), 100, 100);
         PlanEvacuacion pm = new PlanificadorEvacuacion(new Dijkstra(), new CostoPorRiesgo())
                 .planificar(mapaFalso.obtener().grafo(), "A", nada);
-        verificar(pm.ok() && pm.mejor().id().equals("PE1") && Math.abs(pm.mejor().distanciaM() - 10.0) < 1e-6,
-                "Con un mapa mínimo elige el PE más cercano (PE1 a 10 m, no PE2 a 100 m)");
+        verificar(pm.ok() && pm.mejor().id().equals("PE1") && Math.abs(pm.mejor().distanciaM() - 40 * Grafo.METROS_POR_PIXEL) < 0.11,
+                "Con un mapa mínimo elige el PE más cercano (PE1 a 40 px, no PE2 a 400 px)");
 
         System.out.println("13) Sesiones de administrador");
         long[] reloj = {0};
@@ -322,6 +322,17 @@ public class Pruebas {
             verificar(CargadorInicial.cargarSiVacia(bd, semilla), "La primera vez se carga el mapa a la base");
             verificar(!CargadorInicial.cargarSiVacia(bd, semilla), "La segunda vez no vuelve a cargar");
 
+            // Un cambio del plano conserva los cierres que todavía existen y descarta los obsoletos.
+            ejecutarSql(admin, "INSERT INTO " + esquema + ".bloqueo (tipo, clave) VALUES "
+                    + "('NODO','A1'),('NODO','ANTIGUO'),('ARISTA','COM|SCOM'),('ARISTA','A1|ANTIGUO')");
+            ejecutarSql(admin, "UPDATE " + esquema + ".nodo SET x = x + 1 WHERE id = 'A1'");
+            verificar(CargadorInicial.cargarSiVacia(bd, semilla), "Si el mapa guardado es distinto, se reemplaza");
+            verificar(!CargadorInicial.cargarSiVacia(bd, semilla), "Tras reemplazarlo ya coincide y no vuelve a cargar");
+            var cierres = new EmergenciaEnBD(bd).obtener().restricciones();
+            verificar(cierres.nodos().equals(java.util.Set.of("A1"))
+                    && cierres.aristas().equals(java.util.Set.of("COM|SCOM")),
+                    "Al cambiar el plano se conservan los bloqueos vigentes de puntos y caminos");
+
             MapaCampus enBD = new MapaEnBD(bd).obtener();
             MapaCampus enMem = semilla.obtener();
             verificar(enBD.ancho() == enMem.ancho() && enBD.alto() == enMem.alto(), "El tamaño del plano se conserva");
@@ -398,10 +409,10 @@ public class Pruebas {
         g.agregarNodo(new Nodo("B", "Pasillo", 20, 0, Nodo.Tipo.PASILLO));
         g.agregarNodo(new Nodo("PE1", "Punto 1", 20, 20, Nodo.Tipo.PUNTO_ENCUENTRO));
         g.agregarNodo(new Nodo("PE2", "Punto 2", 400, 0, Nodo.Tipo.PUNTO_ENCUENTRO));
-        g.conectar("A", "B");      // 20 px = 5 m
+        g.conectar("A", "B");      // 20 px
         g.conectar("B", "PE1");
         g.conectar("A", "PE2");
-        // A -> B -> PE1 = 5 + 5 = 10 m, mientras que A -> PE2 = 100 m
+        // A -> B -> PE1 = 20 + 20 = 40 px (unos 12 m), mientras que A -> PE2 = 400 px (unos 118 m)
         return g;
     }
 
