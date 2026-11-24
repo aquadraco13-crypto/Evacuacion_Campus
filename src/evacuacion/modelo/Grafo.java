@@ -12,7 +12,7 @@ import java.util.Map;
 public class Grafo {
 
     
-    public static final double METROS_POR_PIXEL = 0.25;
+    public static final double METROS_POR_PIXEL = 0.295;
 
     private final Map<String, Nodo> nodos = new LinkedHashMap<>();
     private final Map<String, List<Arista>> adyacencia = new HashMap<>();

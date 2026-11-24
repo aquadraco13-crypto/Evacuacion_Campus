@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f2e8">
+<title>Net Path UPC · Campus en 3D</title>
+<link rel="stylesheet" href="3d/campus3d.css">
+</head>
+<body>
+<div id="bannerAlerta3d" class="banner-3d" role="alert" hidden></div>
+<main>
+  <div class="sidebar">
+    <header class="heading">
+      <div class="conmutador" role="group" aria-label="Cambiar de vista"><a href="index.html">2D</a><a href="3d.html" aria-current="page">3D</a></div>
+      <p class="campus">Universidad Popular del Cesar</p>
+      <h1>Campus en 3D</h1>
+    </header>
+    <section class="explorar" aria-labelledby="explorar-titulo">
+      <h2 id="explorar-titulo">Explorar el campus</h2>
+      <div class="campos-vista">
+        <label>Zona<select id="zona" disabled></select></label>
+        <label>Vista<select id="vista" disabled></select></label>
+      </div>
+      <fieldset id="pisos" hidden><legend>Piso</legend><div class="floor-list"></div></fieldset>
+    </section>
+    <section class="red-panel" aria-labelledby="red-titulo">
+      <h2 id="red-titulo">Simulación de evacuación</h2>
+      <p id="red-estado" class="red-estado" role="status">Conectando con el simulador…</p>
+      <div class="red-fila">
+        <button id="red-sim" aria-pressed="false">Simular personas</button>
+        <button id="red-ver" aria-pressed="false">Mostrar caminos</button>
+      </div>
+      <p id="red-pista" hidden>Toca un punto de la maqueta para elegir tu ubicación.</p>
+      <div class="grupo-estudiantes" id="grupo-estudiantes" hidden>
+        <output id="red-cantidad"></output>
+        <button id="red-acercar" hidden>Seguir a un estudiante</button>
+      </div>
+      <label for="red-origen" id="red-etiqueta">Punto de partida</label>
+      <select id="red-origen"><option value="">Elige tu ubicación</option></select>
+      <p id="red-ruta" class="red-ruta" role="status"></p>
+      <details id="red-recorrido" hidden><summary>Recorrido y puntos de encuentro</summary>
+        <ol id="red-pasos"></ol><table><caption>Puntos de encuentro</caption><tbody id="red-opciones"></tbody></table>
+      </details>
+      <details class="red-leyenda"><summary>Leyenda del plano</summary>
+        <ul><li><i class="salon"></i>Salón o lugar</li><li><i class="pasillo"></i>Pasillo</li><li><i class="salida"></i>Puerta</li><li><i class="encuentro"></i>Punto de encuentro o ruta</li><li><i class="riesgo"></i>Camino con riesgo</li><li><i class="cierre"></i>Bloqueo</li></ul>
+      </details>
+      <details id="red-acceso"><summary>Administración</summary>
+        <form id="red-login">
+          <label for="red-clave">Clave de administrador</label>
+          <input id="red-clave" type="password" autocomplete="current-password" required>
+          <button type="submit">Entrar</button>
+        </form>
+        <fieldset id="red-admin" hidden>
+          <legend>Controles de administrador</legend>
+          <button id="red-alerta">Activar emergencia</button>
+          <div class="red-fila"><button id="red-editar" aria-pressed="false">Editar bloqueos</button><button id="red-azar">Punto al azar</button></div>
+          <section id="red-editor" hidden>
+            <p>Toca un punto o un tramo en la maqueta para bloquearlo o liberarlo. También puedes elegirlo en la lista.</p>
+            <label for="red-objetivo">Punto o tramo</label><select id="red-objetivo"></select>
+            <div class="red-fila"><button id="red-alternar">Bloquear</button><button id="red-limpiar">Quitar todos</button></div>
+          </section>
+          <button id="red-salir">Cerrar sesión</button>
+        </fieldset>
+        <p id="red-mensaje" role="status"></p>
+      </details>
+    </section>
+    <div class="footer">
+      <button class="export" id="export" type="button" disabled>Descargar modelo 3D <small>GLB</small></button>
+      <p class="status" id="export-status" role="status"></p>
+      <p class="footnote">Reconstrucción a partir de mapa, fotos y videos. Medidas y alturas estimadas.</p>
+    </div>
+  </div>
+  <section class="viewer" aria-label="Visor interactivo del campus" data-camera="aerial">
+    <div class="canvas-host"></div>
+    <div class="street-key" hidden><span data-street="calle">Calle 19C</span><span data-street="transverse">Transversal 29</span><span data-street="carrera">Carrera 30</span><span data-street="diagonal">Diagonal 21</span></div>
+    <div class="street-key" id="sector-key" hidden><span data-block="i">Bloque I</span><span data-block="p">Bloque P</span></div>
+    <p class="tag" id="view-label">Maqueta general</p>
+    <p class="hint" id="controls-hint">Arrastra para girar · Rueda para acercar</p>
+    <p class="notice" id="notice" role="status">Cargando el campus…</p>
+  </section>
+</main>
+<script type="module" src="3d/viewer.js"></script>
+</body>
+</html>
