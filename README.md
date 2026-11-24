@@ -6,6 +6,14 @@ Si un camino o una puerta queda bloqueado, la ruta se recalcula al instante.
 
 Solo usa el JDK (Java 17 o superior). No hay que instalar librerías.
 
+## Abrir el campus en 2D y 3D
+
+Para entrar desde el celular o el computador, abre [Net Path UPC en Render](https://net-path-upc.onrender.com/) y elige **2D** o **3D**. El [panel de administración](https://net-path-upc.onrender.com/admin.html) pide la clave del proyecto. Los dos visores comparten las alertas y los bloqueos de PostgreSQL.
+
+En NetBeans, abre la carpeta que contiene `build.xml` y pulsa **F6** con JDK 26. Abre [el simulador](http://localhost:8080/) y selecciona **3D**. Ambos visores consultan el mismo servidor Java y comparten la sesión de administrador.
+
+En **Administración** puedes ensayar rutas, activar o desactivar la emergencia y editar bloqueos. Selecciona **Editar bloqueos** y toca un punto o tramo del plano, o elígelo por nombre en la lista. Los cambios aparecen también en 2D. Durante una emergencia, los estudiantes pueden elegir un origen y consultar el recorrido y las alternativas. **Simular personas** pone a los estudiantes en movimiento y **Seguir a un estudiante** acerca la cámara. Los pisos pueden explorarse; las rutas utilizan las conexiones del grafo 2D.
+
 ## Cómo ejecutarlo
 
 **Linux / macOS**
@@ -46,7 +54,7 @@ DATABASE_URL=postgres://usuario:clave@servidor:5432/basededatos
   entregan esta dirección ya lista. Si la base la pide, se agrega `?sslmode=require` al final.
 - Las sesiones de administrador **no** se guardan en la base (son temporales): tras reiniciar hay que volver a entrar.
 - Para las pruebas con base real: `PRUEBAS_DATABASE_URL=postgres://usuario:clave@localhost:5432/base_de_pruebas ./ejecutar.sh`.
-  Trabajan en un esquema temporal que se borra al terminar. Sin esa variable se omiten (59 pruebas); con ella corren las 68.
+  Trabajan en un esquema temporal que se borra al terminar.
 - El driver de PostgreSQL está en `lib/postgresql-42.7.2.jar` (es la única librería externa del proyecto).
 
 ## Estudiantes y administradores
